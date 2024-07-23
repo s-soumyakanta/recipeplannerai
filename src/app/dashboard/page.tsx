@@ -1,8 +1,7 @@
+import RecipePlannerChat from "@/components/RecipePlannerChat"
 
 const page = () => {
-  return (
-    <div>Dashboard</div>
-  )
+  return <RecipePlannerChat />
 }
 
 export default page
