@@ -22,7 +22,7 @@ const RecipePlannerChat: React.FC = () => {
   };
 
   return (
-    <div className="flex rounded-md flex-col h-[calc(100vh-130px)] md:h-[calc(100vh-100px)] bg-red-50 dark:bg-red-900 text-red-900 dark:text-red-50 overflow-hidden">
+    <div className="flex rounded-md flex-col h-[calc(100vh-100px)] md:h-[calc(100vh-100px)] bg-red-50 dark:bg-red-900 text-red-900 dark:text-red-50 overflow-hidden">
       {!isChatStarted ? (
         <div className="flex flex-col h-full justify-between">
           <div className="flex-grow flex flex-col justify-between overflow-y-auto">

@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { FiMenu, FiSun, FiMoon, FiSettings, FiUser } from 'react-icons/fi';
 
 interface NavbarProps {
@@ -11,6 +12,8 @@ interface NavbarProps {
 }
 
 const Navbar: React.FC<NavbarProps> = ({ setIsSidebarOpen, toggleDarkMode, isDarkMode }) => {
+  const pathname = usePathname();
+
   return (
     <nav className="bg-red-800 dark:bg-red-950 text-white p-4 flex justify-between items-center">
       <div className="flex items-center">
@@ -32,12 +35,21 @@ const Navbar: React.FC<NavbarProps> = ({ setIsSidebarOpen, toggleDarkMode, isDar
         >
           {isDarkMode ? <FiSun size={20} /> : <FiMoon size={20} />}
         </button>
-        <Link href="dashboard/settings"
-          className="focus:outline-none focus:ring-2 focus:ring-white rounded-full p-1"
-          aria-label="Settings"
-        >
-          <FiSettings size={20} />
-        </Link>
+        {pathname !== '/dashboard/settings' ? (
+          <Link href="/dashboard/settings"
+            className="focus:outline-none focus:ring-2 focus:ring-white rounded-full p-1"
+            aria-label="Settings"
+          >
+            <FiSettings size={20} />
+          </Link>
+        ) : (
+          <div
+            className="focus:outline-none focus:ring-2 focus:ring-white rounded-full p-1"
+            aria-label="Settings"
+          >
+            <FiSettings size={20} />
+          </div>
+        )}
         <div
           className="focus:outline-none focus:ring-2 focus:ring-white rounded-full p-1 cursor-pointer"
           aria-label="Profile"
