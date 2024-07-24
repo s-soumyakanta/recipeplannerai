@@ -4,18 +4,19 @@ import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { FiMenu, FiSun, FiMoon, FiSettings, FiUser } from 'react-icons/fi';
+import { doLogout } from '@/app/actions';
+import Logout from './Logout';
 
 interface NavbarProps {
   setIsSidebarOpen: (isOpen: boolean) => void;
-  toggleDarkMode: () => void;
-  isDarkMode: boolean;
 }
 
-const Navbar: React.FC<NavbarProps> = ({ setIsSidebarOpen, toggleDarkMode, isDarkMode }) => {
+const Navbar: React.FC<NavbarProps> = ({ setIsSidebarOpen }) => {
   const pathname = usePathname();
 
   return (
     <nav className="bg-red-800 dark:bg-red-950 text-white p-4 flex justify-between items-center">
+<Logout />
       <div className="flex items-center">
         <button
           onClick={() => setIsSidebarOpen(true)}
@@ -29,11 +30,12 @@ const Navbar: React.FC<NavbarProps> = ({ setIsSidebarOpen, toggleDarkMode, isDar
       </div>
       <div className="flex items-center space-x-4">
         <button
-          onClick={toggleDarkMode}
+          // onClick={toggleDarkMode}
           className="focus:outline-none focus:ring-2 focus:ring-white rounded-full p-1"
-          aria-label={isDarkMode ? "Switch to light mode" : "Switch to dark mode"}
+          aria-label="Switch mode"
         >
-          {isDarkMode ? <FiSun size={20} /> : <FiMoon size={20} />}
+          {/* {isDarkMode ? <FiSun size={20} /> : <FiMoon size={20} />} */}
+          {<FiSun size={20} />}
         </button>
         {pathname !== '/dashboard/settings' ? (
           <Link href="/dashboard/settings"
