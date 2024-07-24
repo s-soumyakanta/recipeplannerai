@@ -22,7 +22,7 @@ const Navbar: React.FC<NavbarProps> = ({ setIsSidebarOpen, toggleDarkMode, isDar
         >
           <FiMenu size={24} />
         </button>
-        <Link href="/dashboard" className="text-xl font-bold">RecipePlannerAI</Link>
+        <Link href="/dashboard" className="text-md md:text-xl font-bold">RecipePlannerAI</Link>
       </div>
       <div className="flex items-center space-x-4">
         <button

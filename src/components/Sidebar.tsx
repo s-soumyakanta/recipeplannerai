@@ -54,21 +54,23 @@ const Sidebar: React.FC<SidebarProps> = ({
       >
         <div className="flex flex-col h-full">
           {/* Top part - Navigation Tabs */}
-          <div className="p-4 flex-grow">
-            <button
-              onClick={() => setIsSidebarOpen(false)}
-              className=" focus:outline-none focus:ring-2 focus:ring-white  sm:hidden absolute top-4 right-4 w-8 h-8 flex items-center justify-center text-red-200 hover:text-white transition-colors duration-200 bg-transparent hover:bg-red-500 rounded-full p-2"
-              type="button"
-              aria-label="Close menu"
-            >
-              <IoClose size={48} />
-            </button>
-
+          <div className="p-4  flex-grow">
+            <div className="flex flex-row mb-6 items-center  justify-between text-center  ">
             {isSidebarOpen && (
-              <h2 className="text-xl font-bold mb-6 text-red-100">
-                RecipePlannerAI
-              </h2>
-            )}
+                <h2 className="text-md md:text-xl font-bold  text-red-100 ">
+                  RecipePlannerAI
+                </h2>
+              )}
+              <button
+                onClick={() => setIsSidebarOpen(false)}
+                className=" focus:outline-none focus:ring-2 focus:ring-white  sm:hidden   text-red-200 hover:text-white transition-colors duration-200 bg-transparent hover:bg-red-500 rounded-full"
+                type="button"
+                aria-label="Close menu"
+              >
+                <IoClose size={24} />
+              </button>
+
+            </div>
             <nav>
               <ul>
                 {tabs.map((tab) => (
