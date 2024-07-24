@@ -1,6 +1,7 @@
 "use client";
 
 import {doCredentialLogin} from "@/app/actions"
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -40,6 +41,9 @@ const LoginForm = () => {
         </div>
        <div>
        <button type="submit">Submit</button>
+       </div>
+       <div>
+        <p>Do not have an account? <Link href="/register">Register</Link></p>
        </div>
      </form>
 

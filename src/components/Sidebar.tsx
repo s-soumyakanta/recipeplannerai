@@ -3,7 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { IoClose } from "react-icons/io5";
+import { IoClose, IoHomeOutline, IoListOutline, IoNutritionOutline, IoCloudOutline } from "react-icons/io5";
 
 interface SidebarProps {
   isSidebarOpen: boolean;
@@ -17,16 +17,18 @@ const Sidebar: React.FC<SidebarProps> = ({
   const pathname = usePathname();
 
   const tabs = [
-    { id: "dashboard", name: "Dashboard", href: "/dashboard" },
+    { id: "dashboard", name: "Dashboard", href: "/dashboard", icon: <IoHomeOutline /> },
     {
       id: "availableIngredients",
       name: "Available Ingredients",
       href: "/dashboard/available-ingredients",
+      icon: <IoListOutline />,
     },
     {
       id: "dietPreferences",
       name: "Diet Preferences",
       href: "/dashboard/diet-preferences",
+      icon: <IoNutritionOutline />,
     },
   ];
 
@@ -39,69 +41,65 @@ const Sidebar: React.FC<SidebarProps> = ({
       {/* Overlay for small screens */}
       {isSidebarOpen && (
         <div
-          className="fixed inset-0 bg-black bg-opacity-90 z-40 sm:hidden"
+          className="fixed inset-0 z-40 bg-gray-600 bg-opacity-75 transition-opacity md:hidden"
           onClick={() => setIsSidebarOpen(false)}
         ></div>
       )}
 
       {/* Sidebar */}
-      <aside
-        className={`
-          fixed sm:relative top-0 left-0 z-50 h-full bg-red-900 dark:bg-red-950 text-red-100 overflow-y-auto transition-all duration-300 ease-in-out
-          ${isSidebarOpen ? "w-5/6" : "w-0"}
-          sm:w-64 md:w-72 lg:w-80 sm:transform-none
-        `}
+      <div
+        className={`fixed top-0 left-0 z-50 w-64 transform transition-transform duration-300 ease-in-out ${
+          isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+        } md:translate-x-0 md:static bg-gray-100 dark:bg-gray-800`}
       >
-        <div className="flex flex-col h-full">
+        <div className="flex flex-col overflow-y-auto px-3 py-4 h-full rounded-md">
           {/* Top part - Navigation Tabs */}
-          <div className="p-4  flex-grow">
-            <div className="flex flex-row mb-6 items-center  justify-between text-center  ">
-            {isSidebarOpen && (
-                <h2 className="text-md md:text-xl font-bold  text-red-100 ">
-                  RecipePlannerAI
-                </h2>
+          <div className="mb-8">
+            <div className="flex items-center justify-between mb-6">
+              {isSidebarOpen && (
+                <h2 className="text-2xl font-bold text-gray-900 dark:text-white">RecipePlannerAI</h2>
               )}
               <button
                 onClick={() => setIsSidebarOpen(false)}
-                className=" focus:outline-none focus:ring-2 focus:ring-white  sm:hidden   text-red-200 hover:text-white transition-colors duration-200 bg-transparent hover:bg-red-500 rounded-full"
+                className="md:hidden p-2 focus:outline-none focus:ring-2 focus:ring-gray-400 dark:focus:ring-gray-100 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-colors duration-200 rounded-full"
                 type="button"
                 aria-label="Close menu"
               >
                 <IoClose size={24} />
               </button>
-
             </div>
-            <nav>
-              <ul>
-                {tabs.map((tab) => (
-                  <li key={tab.id} className="mb-2">
-                    <Link
-                      href={tab.href}
-                      className={`block p-2 rounded transition-colors
-                        ${
-                          pathname === tab.href
-                            ? "bg-red-700 dark:bg-red-800 text-white"
-                            : "text-red-200 hover:bg-red-800 dark:hover:bg-red-900 hover:text-white"
-                        }`}
-                      onClick={handleTabClick}
-                    >
-                      {tab.name}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
+
+            <nav className="space-y-2">
+              {tabs.map((tab) => (
+                <Link
+                  key={tab.id}
+                  href={tab.href}
+                  onClick={handleTabClick}
+                  className={`flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-colors duration-200 ${
+                    pathname === tab.href
+                      ? "bg-indigo-600 text-white"
+                      : "text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-white"
+                  }`}
+                >
+                  <span className="mr-3">{tab.icon}</span>
+                  {tab.name}
+                </Link>
+              ))}
             </nav>
           </div>
 
           {/* Bottom part - Weather Data */}
-          <div className="p-4 bg-red-800 dark:bg-red-900">
-            <h3 className="text-sm font-semibold mb-2 text-red-100">
-              Local Weather
-            </h3>
-            <p className="text-red-200">Weather data</p>
+          <div className="mt-auto">
+            <div className="rounded-lg bg-white dark:bg-gray-700 p-4">
+              <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2 flex items-center">
+                <IoCloudOutline className="mr-2" />
+                Local Weather
+              </h3>
+              <p className="text-sm text-gray-600 dark:text-gray-300">Weather data goes here</p>
+            </div>
           </div>
         </div>
-      </aside>
+      </div>
     </>
   );
 };
