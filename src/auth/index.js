@@ -22,25 +22,30 @@ export const {
                 if (credentials === null) return null;
                 
                 try {
-                    const user = await User.findOne({
-                        email:credentials?.email
-                    });
-                    console.log(user);
-                    if (user) {
-                        const isMatch = await bcrypt.compare(credentials.password, user.password)
-
-                        if (isMatch) {
-                            return user;
-                        } else {
-                            throw new Error("Email or Password is not correct");
-                        }
+                  console.time('findUser');
+                  const user = await User.findOne({ email: credentials?.email });
+                  console.timeEnd('findUser');
+                  
+                  if (user) {
+                    console.time('comparePassword');
+                    const isMatch = await bcrypt.compare(credentials.password, user.password);
+                    console.timeEnd('comparePassword');
+                    
+                    if (isMatch) {
+                      return user;
                     } else {
-                        throw new Error("User not found");
+                      console.log('Password mismatch');
+                      throw new Error("Email or Password is not correct");
                     }
+                  } else {
+                    console.log('User not found');
+                    throw new Error("User not found");
+                  }
                 } catch (error) {
-                    throw new Error(error);
+                  console.error('Authorization error:', error);
+                  throw new Error(error);
                 }
-            },
+              },
         })
     ],
 });
