@@ -1,8 +1,7 @@
+import DietPreferenceForm from "@/components/DietPreferenceForm"
 
 const Page = () => {
-  return (
-    <div>Diet Profile</div>
-  )
+  return <DietPreferenceForm />
 }
 
 export default Page

@@ -1,8 +1,7 @@
+import AvailableIngredientsForm from "@/components/AvailableIngredientsForm"
 
 const page = () => {
-  return (
-    <div>Ingredients</div>
-  )
+  return <AvailableIngredientsForm />
 }
 
 export default page
