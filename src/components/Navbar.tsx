@@ -3,6 +3,7 @@ import { usePathname } from "next/navigation";
 import { FiMenu, FiSun, FiMoon, FiSettings, FiUser } from "react-icons/fi";
 import { GiCook } from "react-icons/gi";
 import { useBoolean } from "@/hooks/use-boolean";
+import useDarkMode from "@/hooks/use-dark-mode";
 import Logout from "./Logout";
 import Usercard from "./Usercard";
 
@@ -13,6 +14,7 @@ interface NavbarProps {
 const Navbar: React.FC<NavbarProps> = ({ setIsSidebarOpen }) => {
   const pathname = usePathname();
   const { value: isProfileDropdownOpen, onToggle: toggleProfileDropdown } = useBoolean(false);
+  const { isDarkMode, toggleDarkMode } = useDarkMode();
 
   return (
     <nav className="bg-white dark:bg-gray-800 shadow-md ">
@@ -36,12 +38,11 @@ const Navbar: React.FC<NavbarProps> = ({ setIsSidebarOpen }) => {
           </div>
           <div className="flex items-center space-x-4">
             <button
-              // onClick={toggleDarkMode}
+              onClick={toggleDarkMode}
               className="p-2 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:hover:text-gray-300 dark:focus:ring-offset-gray-800"
               aria-label="Switch mode"
             >
-              <FiSun size={20} />
-              {/* {isDarkMode ? <FiSun size={20} /> : <FiMoon size={20} />} */}
+              {isDarkMode ? <FiSun size={20} /> : <FiMoon size={20} />}
             </button>
             <Link
               href="/dashboard/settings"
