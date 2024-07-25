@@ -4,6 +4,7 @@ import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { IoClose, IoHomeOutline, IoListOutline, IoNutritionOutline, IoCloudOutline } from "react-icons/io5";
+import { GiCook } from "react-icons/gi";
 
 interface SidebarProps {
   isSidebarOpen: boolean;
@@ -48,18 +49,20 @@ const Sidebar: React.FC<SidebarProps> = ({
 
       {/* Sidebar */}
       <div
-        className={`fixed top-0 left-0 z-50 w-64 transform transition-transform duration-300 ease-in-out ${
+        className={`fixed top-0 left-0 z-50 h-full w-4/5 max-w-xs transform transition-transform duration-300 ease-in-out ${
           isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-        } md:translate-x-0 md:static bg-gray-100 dark:bg-gray-800`}
+        } md:translate-x-0 md:static md:w-64 bg-gray-100 dark:bg-gray-800 `}
       >
-        <div className="flex flex-col overflow-y-auto px-3 py-4 h-full rounded-md">
+        <div className="flex flex-col overflow-y-auto px-3 py-4 h-full">
           {/* Top part - Navigation Tabs */}
           <div className="mb-8">
-            <div className="flex items-center justify-between mb-6">
-              {isSidebarOpen && (
-                <h2 className="text-2xl font-bold text-gray-900 dark:text-white">RecipePlannerAI</h2>
-              )}
-              <button
+            <div className="flex items-center justify-between mb-6 md:hidden">
+      <div className="flex space-x-1 items-center">
+      <GiCook className="text-xl text-blue-600 dark:text-blue-500 inline-block" />
+              <h2 className="text-xl font-bold text-gray-900 dark:text-white">RecipePlannerAI</h2>
+             
+      </div>
+       <button
                 onClick={() => setIsSidebarOpen(false)}
                 className="md:hidden p-2 focus:outline-none focus:ring-2 focus:ring-gray-400 dark:focus:ring-gray-100 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-colors duration-200 rounded-full"
                 type="button"

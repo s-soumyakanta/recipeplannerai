@@ -106,7 +106,7 @@ const AvailableIngredientsForm: React.FC = () => {
         <div className='w-full flex justify-end'>
           <button 
             type="submit" 
-            className="w-1/5  text-white text-base bg-indigo-500 border-0 py-2 px-8 text-center md:py-2 md:px-8 focus:outline-none hover:bg-indigo-600 rounded md:text-lg"
+            className="md:w-1/5 w-2/4   text-white text-base bg-indigo-500 border-0 py-2 text-center md:py-2 md:px-8 focus:outline-none hover:bg-indigo-600 rounded md:text-lg"
             disabled={isSubmitting}
           >
             {isSubmitting ? 'Saving...' : 'Save Ingredients'}

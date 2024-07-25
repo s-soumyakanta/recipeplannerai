@@ -32,7 +32,6 @@ const RecipePlannerChat: React.FC = () => {
                 <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-4">Welcome to RecipePlannerAI</h1>
                 <p className="text-sm sm:text-base lg:text-lg mb-6 max-w-2xl mx-auto">
                   Create delicious recipes tailored to your available ingredients and dietary preferences. 
-                  Let&apos;s start by setting up your profile!
                 </p>
               </div>
 
