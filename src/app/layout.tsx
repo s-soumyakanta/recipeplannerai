@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { connectDB } from "@/lib/mongo";
+import { connectDB } from "@/lib/mongo"; // Ensure the path is correct
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -45,7 +45,7 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
- await connectDB();
+  await connectDB();
 
   return (
     <html lang="en">

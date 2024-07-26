@@ -1,23 +1,23 @@
 import mongoose from "mongoose";
 
 type ConnectionObject = {
-  isConnected?:number
-}
+  isConnected?: number;
+};
 const connection: ConnectionObject = {};
 
-export async function connectDB():Promise<void> {
-  if(connection.isConnected){
-    console.log("Already DB connectd")
-    return
+export async function connectDB(): Promise<void> {
+  if (connection.isConnected) {
+    console.log("Already connected to DB");
+    return;
   }
+
   try {
-    const db = await mongoose.connect(String(process.env.MONGODB_URI));
-     connection.isConnected = db.connections[0].readyState
-     console.log("DB connected Successfully")
+    const db = await mongoose.connect(process.env.MONGODB_URI || "");
+    console.log('MongoDB URI:', process.env.MONGODB_URI);
+    connection.isConnected = db.connections[0].readyState;
+    console.log("DB connected successfully");
   } catch (e) {
-    const errorMessage =
-      e instanceof Error ? e.message : "Unknown error occurred while connecting db!";
+    const errorMessage = e instanceof Error ? e.message : "Unknown error occurred while connecting to DB!";
     throw new Error(errorMessage);
-    process.exit(1);
   }
 }

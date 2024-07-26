@@ -16,8 +16,7 @@ const formSchema = z.object({
   spices: z.array(z.object({ value: z.string(), label: z.string() })),
   condiments: z.array(z.object({ value: z.string(), label: z.string() })),
   oils: z.array(z.object({ value: z.string(), label: z.string() })),
-  customIngredients: z.string().optional(),
-  expirationDate: z.date().optional(),
+  customIngredients: z.string().optional()
 });
 
 type FormData = z.infer<typeof formSchema>;
@@ -94,14 +93,6 @@ const AvailableIngredientsForm: React.FC = () => {
             placeholder="Enter any additional ingredients you have, separated by commas"
             className="w-full bg-gray-800 rounded border border-gray-700 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-900 h-24 text-base outline-none text-gray-100 py-1 px-3 resize-none leading-6 transition-colors duration-200 ease-in-out"
           ></textarea>
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-400 mb-1">Expiration Date (optional)</label>
-          <input
-            type="date"
-            {...register('expirationDate')}
-            className="w-full bg-gray-800 rounded border border-gray-700 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-900 text-base outline-none text-gray-100 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
-          />
         </div>
         <div className='w-full flex justify-end'>
           <button 
