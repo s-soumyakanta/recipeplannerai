@@ -69,5 +69,5 @@ const LoginForm = () => {
     </div>
   );
 }
-
+export const runtime = 'edge';
 export default LoginForm;
