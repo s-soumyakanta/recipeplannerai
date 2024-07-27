@@ -59,7 +59,7 @@ const AvailableIngredientsForm: React.FC = () => {
   const onSubmit: SubmitHandler<FormData> = async (data) => {
     setIsSubmitting(true);
     const userId = "60d0fe4f5311236168a109de"; // Replace with actual userId
-    const dataWithUserId = { ...data, userId }; // Add userId to the form data
+    const dataWithUserId = { ...data, userId };
 
     try {
       const response = await fetch('/api/savepreferences', {
@@ -84,58 +84,45 @@ const AvailableIngredientsForm: React.FC = () => {
 
   const createOptions = (items: string[]): Option[] => items.map(item => ({ value: item.toLowerCase(), label: item }));
 
-  const selectStyles: StylesConfig = {
-    control: (base, state) => ({
-      ...base,
-      background: state.isFocused ? 'var(--bg-control-focused)' : 'var(--bg-control)',
-      borderColor: state.isFocused ? 'var(--border-control-focused)' : 'var(--border-control)',
+  const customStyles: StylesConfig<Option, true> = {
+    control: (provided, state) => ({
+      ...provided,
       minHeight: '36px',
-      height: '36px',
-      boxShadow: state.isFocused ? '0 0 0 1px var(--border-control-focused)' : 'none',
+      height: 'auto',
+      background: state.isFocused ? 'var(--bg-control-focused, #f0f0f0)' : 'var(--bg-control, #ffffff)',
+      borderColor: state.isFocused ? 'var(--border-control-focused, #2684FF)' : 'var(--border-control, #cccccc)',
+      boxShadow: state.isFocused ? '0 0 0 1px var(--border-control-focused, #2684FF)' : 'none',
       '&:hover': {
-        borderColor: state.isFocused ? 'var(--border-control-focused)' : 'var(--border-control-hover)',
+        borderColor: state.isFocused ? 'var(--border-control-focused, #2684FF)' : 'var(--border-control-hover, #999999)',
       },
     }),
-    menu: (base) => ({
-      ...base,
-      background: 'var(--bg-menu)',
+    valueContainer: (provided) => ({
+      ...provided,
+      padding: '2px 8px',
+      flexWrap: 'wrap',
     }),
-    option: (base, state) => ({
-      ...base,
-      background: state.isFocused ? 'var(--bg-option-focused)' : 'var(--bg-option)',
-      color: 'var(--text-option)',
-      '&:active': {
-        background: 'var(--bg-option-active)',
-      },
+    multiValue: (provided) => ({
+      ...provided,
+      backgroundColor: 'var(--bg-multi-value, #e6f0ff)',
+      borderRadius: '4px',
+      margin: '2px',
     }),
-    singleValue: (base) => ({
-      ...base,
-      color: 'var(--text-single-value)',
+    multiValueLabel: (provided) => ({
+      ...provided,
+      color: 'var(--text-multi-value, #0052cc)',
+      padding: '2px 6px',
     }),
-    multiValue: (base) => ({
-      ...base,
-      background: 'var(--bg-multi-value)',
-    }),
-    multiValueLabel: (base) => ({
-      ...base,
-      color: 'var(--text-multi-value)',
-    }),
-    multiValueRemove: (base) => ({
-      ...base,
-      color: 'var(--text-multi-value-remove)',
+    multiValueRemove: (provided) => ({
+      ...provided,
+      color: 'var(--text-multi-value-remove, #0052cc)',
       ':hover': {
-        background: 'var(--bg-multi-value-remove-hover)',
-        color: 'var(--text-multi-value-remove-hover)',
+        backgroundColor: 'var(--bg-multi-value-remove-hover, #cce0ff)',
+        color: 'var(--text-multi-value-remove-hover, #003d99)',
       },
     }),
-    valueContainer: (base) => ({
-      ...base,
-      padding: '0 6px',
-    }),
-    input: (base) => ({
-      ...base,
-      margin: '0px',
-      color: 'var(--text-input)',
+    menu: (provided) => ({
+      ...provided,
+      zIndex: 9999,
     }),
   };
 
@@ -143,8 +130,20 @@ const AvailableIngredientsForm: React.FC = () => {
     <Controller
       name={name}
       control={control}
-      render={({ field }) => (
-        <Select {...field} options={options} isMulti styles={selectStyles} placeholder={placeholder} className="mb-1" />
+      render={({ field: { onChange, value, ref } }) => (
+        <div className="relative">
+          <Select
+            ref={ref}
+            options={options}
+            isMulti
+            value={Array.isArray(value) ? options.filter(option => value.some(item => item.value === option.value)) : []}
+            onChange={(selectedOptions) => onChange(selectedOptions as Option[])}
+            styles={customStyles}
+            placeholder={placeholder}
+            className="react-select-container"
+            classNamePrefix="react-select"
+          />
+        </div>
       )}
     />
   );
@@ -170,7 +169,7 @@ const AvailableIngredientsForm: React.FC = () => {
               { name: 'condiments', options: createOptions(['Ketchup', 'Mustard', 'Mayonnaise', 'Soy Sauce', 'Hot Sauce', 'Sriracha', 'Chutney', 'Relish']), label: 'Condiments' },
               { name: 'oils', options: createOptions(['Olive Oil', 'Vegetable Oil', 'Coconut Oil', 'Sesame Oil', 'Avocado Oil', 'Ghee']), label: 'Oils' },
             ].map((field) => (
-              <div key={field.name} className="mb-2">
+              <div key={field.name} className="mb-4">
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-1">{field.label}</label>
                 {renderSelect(field.name as keyof FormData, field.options, `Select ${field.label.toLowerCase()}...`)}
                 {errors[field.name as keyof FormData] && <p className="text-red-500 text-xs mt-1">This field is required</p>}
