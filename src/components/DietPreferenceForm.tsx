@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useForm, Controller, SubmitHandler, useWatch } from 'react-hook-form';
-import Select, { StylesConfig } from 'react-select';
+import Select from 'react-select';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 
@@ -98,67 +98,19 @@ const DietPreferenceForm: React.FC = () => {
 
   const createOptions = (items: string[]): Option[] => items.map(item => ({ value: item.toLowerCase(), label: item }));
 
-  const selectStyles: StylesConfig = {
-    control: (base, state) => ({
-      ...base,
-      background: state.isFocused ? 'var(--bg-control-focused)' : 'var(--bg-control)',
-      borderColor: state.isFocused ? 'var(--border-control-focused)' : 'var(--border-control)',
-      minHeight: '36px',
-      height: '36px',
-      boxShadow: state.isFocused ? '0 0 0 1px var(--border-control-focused)' : 'none',
-      '&:hover': {
-        borderColor: state.isFocused ? 'var(--border-control-focused)' : 'var(--border-control-hover)',
-      },
-    }),
-    menu: (base) => ({
-      ...base,
-      background: 'var(--bg-menu)',
-    }),
-    option: (base, state) => ({
-      ...base,
-      background: state.isFocused ? 'var(--bg-option-focused)' : 'var(--bg-option)',
-      color: 'var(--text-option)',
-      '&:active': {
-        background: 'var(--bg-option-active)',
-      },
-    }),
-    singleValue: (base) => ({
-      ...base,
-      color: 'var(--text-single-value)',
-    }),
-    multiValue: (base) => ({
-      ...base,
-      background: 'var(--bg-multi-value)',
-    }),
-    multiValueLabel: (base) => ({
-      ...base,
-      color: 'var(--text-multi-value)',
-    }),
-    multiValueRemove: (base) => ({
-      ...base,
-      color: 'var(--text-multi-value-remove)',
-      ':hover': {
-        background: 'var(--bg-multi-value-remove-hover)',
-        color: 'var(--text-multi-value-remove-hover)',
-      },
-    }),
-    valueContainer: (base) => ({
-      ...base,
-      padding: '0 6px',
-    }),
-    input: (base) => ({
-      ...base,
-      margin: '0px',
-      color: 'var(--text-input)',
-    }),
-  };
-
   const renderSelect = (name: keyof FormData, options: Option[], placeholder: string) => (
     <Controller
       name={name}
       control={control}
       render={({ field }) => (
-        <Select {...field} options={options} isMulti styles={selectStyles} placeholder={placeholder} className="mb-1" />
+        <Select 
+          {...field} 
+          options={options} 
+          isMulti 
+          placeholder={placeholder} 
+          className="react-select-container mb-1"
+          classNamePrefix="react-select"
+        />
       )}
     />
   );
@@ -168,7 +120,13 @@ const DietPreferenceForm: React.FC = () => {
       name={name}
       control={control}
       render={({ field }) => (
-        <Select {...field} options={options} styles={selectStyles} placeholder={placeholder} className="mb-1" />
+        <Select 
+          {...field} 
+          options={options} 
+          placeholder={placeholder} 
+          className="react-select-container mb-1"
+          classNamePrefix="react-select"
+        />
       )}
     />
   );
