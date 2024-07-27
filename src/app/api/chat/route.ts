@@ -1,5 +1,7 @@
 import { createResource } from '@/lib/actions/resources';
 import { openai } from '@ai-sdk/openai';
+import { generateText } from 'ai';
+import { createOpenAI as createGroq } from '@ai-sdk/openai';
 import { convertToCoreMessages, streamText, tool } from 'ai';
 import { z } from 'zod';
 import { findRelevantContent } from '@/lib/ai/embedding';
@@ -10,8 +12,14 @@ export const maxDuration = 30;
 export async function POST(req: Request) {
   const { messages } = await req.json();
 
+  const groq = createGroq({
+    baseURL: 'https://api.groq.com/openai/v1',
+    apiKey: process.env.GROQ_API_KEY,
+  });
+  
+
   const result = await streamText({
-    model: openai('gpt-4o'),
+    model: groq('llama-3.1-70b-versatile'),
     messages: convertToCoreMessages(messages),
     system: `You are a helpful assistant. Check your knowledge base before answering any questions.
     Only respond to questions using information from tool calls.
