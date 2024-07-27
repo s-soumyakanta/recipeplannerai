@@ -1,8 +1,8 @@
 import { connectDB } from '@/lib/mongo';
 import UserPreferences from '@/model/userPreferencesModel';
-import { NextResponse } from 'next/server';
+import { NextResponse, NextRequest } from 'next/server';
 
-export const POST = async (req: { json: () => any; }) => {
+export const POST = async (req: NextRequest) => {
   await connectDB();
   let data;
 
