@@ -1,3 +1,6 @@
+"use client";
+
+import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { FiMenu, FiSun, FiMoon, FiSettings, FiUser } from "react-icons/fi";
@@ -17,7 +20,7 @@ const Navbar: React.FC<NavbarProps> = ({ setIsSidebarOpen }) => {
   const { isDarkMode, toggleDarkMode } = useDarkMode();
 
   return (
-    <nav className="bg-white dark:bg-gray-800 shadow-md ">
+    <nav className="bg-gray-100 dark:bg-gray-800 shadow-lg border-b border-gray-200 dark:border-gray-700">
       <div className="max-w-8xl mx-auto px-3 py-4">
         <div className="flex justify-between items-center">
           <div className="flex items-center">
@@ -65,7 +68,6 @@ const Navbar: React.FC<NavbarProps> = ({ setIsSidebarOpen }) => {
               </button>
               {isProfileDropdownOpen && (
                 <div className="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white dark:bg-gray-700 ring-1 ring-black ring-opacity-5 focus:outline-none">
-                  {/* <Usercard /> */}
                   <div className="py-1">
                     <Logout />
                   </div>

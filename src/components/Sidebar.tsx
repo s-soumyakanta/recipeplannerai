@@ -18,18 +18,18 @@ const Sidebar: React.FC<SidebarProps> = ({
   const pathname = usePathname();
 
   const tabs = [
-    { id: "dashboard", name: "Dashboard", href: "/dashboard", icon: <IoHomeOutline /> },
+    { id: "dashboard", name: "Dashboard", href: "/dashboard", icon: <IoHomeOutline className="text-lg" /> },
     {
       id: "availableIngredients",
       name: "Available Ingredients",
       href: "/dashboard/available-ingredients",
-      icon: <IoListOutline />,
+      icon: <IoListOutline className="text-lg" />,
     },
     {
       id: "dietPreferences",
       name: "Diet Preferences",
       href: "/dashboard/diet-preferences",
-      icon: <IoNutritionOutline />,
+      icon: <IoNutritionOutline className="text-lg" />,
     },
   ];
 
@@ -39,7 +39,6 @@ const Sidebar: React.FC<SidebarProps> = ({
 
   return (
     <>
-      {/* Overlay for small screens */}
       {isSidebarOpen && (
         <div
           className="fixed inset-0 z-40 bg-gray-600 bg-opacity-75 transition-opacity md:hidden"
@@ -47,22 +46,19 @@ const Sidebar: React.FC<SidebarProps> = ({
         ></div>
       )}
 
-      {/* Sidebar */}
       <div
         className={`fixed top-0 left-0 z-50 h-full w-4/5 max-w-xs transform transition-transform duration-300 ease-in-out ${
           isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-        } md:translate-x-0 md:static md:w-64 bg-gray-100 dark:bg-gray-800 `}
+        } md:translate-x-0 md:static md:w-72 bg-gray-100 dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700`}
       >
         <div className="flex flex-col overflow-y-auto px-3 py-4 h-full">
-          {/* Top part - Navigation Tabs */}
           <div className="mb-8">
             <div className="flex items-center justify-between mb-6 md:hidden">
-      <div className="flex space-x-1 items-center">
-      <GiCook className="text-xl text-blue-600 dark:text-blue-500 inline-block" />
-              <h2 className="text-xl font-bold text-gray-900 dark:text-white">RecipePlannerAI</h2>
-             
-      </div>
-       <button
+              <div className="flex space-x-1 items-center">
+                <GiCook className="text-xl text-blue-600 dark:text-blue-500 inline-block" />
+                <h2 className="text-xl font-bold text-gray-900 dark:text-white">RecipePlannerAI</h2>
+              </div>
+              <button
                 onClick={() => setIsSidebarOpen(false)}
                 className="md:hidden p-2 focus:outline-none focus:ring-2 focus:ring-gray-400 dark:focus:ring-gray-100 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-colors duration-200 rounded-full"
                 type="button"
@@ -72,7 +68,7 @@ const Sidebar: React.FC<SidebarProps> = ({
               </button>
             </div>
 
-            <nav className="space-y-2">
+            <nav className="space-y-3">
               {tabs.map((tab) => (
                 <Link
                   key={tab.id}
@@ -91,9 +87,8 @@ const Sidebar: React.FC<SidebarProps> = ({
             </nav>
           </div>
 
-          {/* Bottom part - Weather Data */}
           <div className="mt-auto">
-            <div className="rounded-lg bg-white dark:bg-gray-700 p-4">
+            <div className="rounded-lg bg-white dark:bg-gray-700 p-4 border border-gray-200 dark:border-gray-700">
               <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2 flex items-center">
                 <IoCloudOutline className="mr-2" />
                 Local Weather
