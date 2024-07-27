@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useForm, Controller, SubmitHandler } from 'react-hook-form';
 import Select, { StylesConfig } from 'react-select';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -28,15 +28,58 @@ interface Option {
 
 const AvailableIngredientsForm: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { register, handleSubmit, control, formState: { errors } } = useForm<FormData>({
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const { register, handleSubmit, control, reset, formState: { errors } } = useForm<FormData>({
     resolver: zodResolver(formSchema),
   });
 
+  useEffect(() => {
+    const fetchPreferences = async () => {
+      const userId = "60d0fe4f5311236168a109de"; // Replace with actual userId
+      try {
+        const response = await fetch(`/api/getpreferences?userId=${userId}`);
+        const data = await response.json();
+        if (response.ok) {
+          reset(data);
+        } else {
+          setError(data.error || 'Failed to fetch preferences');
+        }
+      } catch (error) {
+        setError('Error fetching preferences');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPreferences();
+  }, [reset]);
+
   const onSubmit: SubmitHandler<FormData> = async (data) => {
     setIsSubmitting(true);
-    console.log(data);
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    setIsSubmitting(false);
+    const userId = "60d0fe4f5311236168a109de"; // Replace with actual userId
+    const dataWithUserId = { ...data, userId }; // Add userId to the form data
+
+    try {
+      const response = await fetch('/api/savepreferences', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(dataWithUserId),
+      });
+
+      if (response.ok) {
+        console.log('Preferences saved successfully');
+      } else {
+        setError('Error saving preferences');
+      }
+    } catch (error) {
+      setError('Error saving preferences');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const createOptions = (items: string[]): Option[] => items.map(item => ({ value: item.toLowerCase(), label: item }));
@@ -109,44 +152,50 @@ const AvailableIngredientsForm: React.FC = () => {
   return (
     <div className="container mx-auto px-4 py-8 bg-white dark:bg-gray-900">
       <h1 className="text-2xl font-medium mb-6 text-gray-900 dark:text-white">Available Ingredients</h1>
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {[
-            { name: 'proteins', options: createOptions(['Chicken', 'Fish', 'Tofu', 'Eggs', 'Beans']), label: 'Proteins' },
-            { name: 'vegetables', options: createOptions(['Tomatoes', 'Onions', 'Carrots', 'Broccoli', 'Spinach', 'Bell Peppers', 'Potatoes']), label: 'Vegetables' },
-            { name: 'fruits', options: createOptions(['Apples', 'Bananas', 'Oranges', 'Berries', 'Lemons', 'Limes']), label: 'Fruits' },
-            { name: 'grains', options: createOptions(['Rice', 'Pasta', 'Bread', 'Quinoa', 'Oats']), label: 'Grains' },
-            { name: 'dairy', options: createOptions(['Milk', 'Cheese', 'Yogurt', 'Butter', 'Cream']), label: 'Dairy' },
-            { name: 'herbs', options: createOptions(['Basil', 'Parsley', 'Cilantro', 'Thyme', 'Rosemary']), label: 'Herbs' },
-            { name: 'spices', options: createOptions(['Salt', 'Pepper', 'Cumin', 'Paprika', 'Cinnamon', 'Garlic Powder']), label: 'Spices' },
-            { name: 'condiments', options: createOptions(['Ketchup', 'Mustard', 'Mayonnaise', 'Soy Sauce', 'Hot Sauce']), label: 'Condiments' },
-            { name: 'oils', options: createOptions(['Olive Oil', 'Vegetable Oil', 'Coconut Oil', 'Sesame Oil']), label: 'Oils' },
-          ].map((field) => (
-            <div key={field.name} className="mb-2">
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-1">{field.label}</label>
-              {renderSelect(field.name as keyof FormData, field.options, `Select ${field.label.toLowerCase()}...`)}
-              {errors[field.name as keyof FormData] && <p className="text-red-500 text-xs mt-1">This field is required</p>}
-            </div>
-          ))}
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-1">Custom Ingredients</label>
-          <textarea
-            {...register('customIngredients')}
-            placeholder="Enter any additional ingredients you have, separated by commas"
-            className="w-full  dark:bg-gray-800 rounded border border-gray-300 dark:border-gray-700 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-900 h-24 text-base outline-none text-gray-900 dark:text-gray-100 py-1 px-3 resize-none leading-6 transition-colors duration-200 ease-in-out"
-          ></textarea>
-        </div>
-        <div className='w-full flex justify-end'>
-          <button 
-            type="submit" 
-            className="md:w-1/5 w-2/4 text-white dark:text-gray-100 bg-indigo-500 border-0 text-center py-2 md:px-8 focus:outline-none hover:bg-indigo-600 rounded text-sm md:text-lg"
-            disabled={isSubmitting}
-          >
-            {isSubmitting ? 'Saving...' : 'Save Ingredients'}
-          </button>
-        </div>
-      </form>
+      {loading ? (
+        <p>Loading...</p>
+      ) : error ? (
+        <p className="text-red-500">{error}</p>
+      ) : (
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {[
+              { name: 'proteins', options: createOptions(['Chicken', 'Fish', 'Tofu', 'Eggs', 'Beans', 'Paneer', 'Lamb']), label: 'Proteins' },
+              { name: 'vegetables', options: createOptions(['Tomatoes', 'Onions', 'Carrots', 'Broccoli', 'Spinach', 'Bell Peppers', 'Potatoes', 'Kale', 'Peas', 'Cauliflower', 'Zucchini', 'Eggplant']), label: 'Vegetables' },
+              { name: 'fruits', options: createOptions(['Apples', 'Bananas', 'Oranges', 'Berries', 'Lemons', 'Limes', 'Mangoes', 'Pineapple', 'Grapes', 'Peaches']), label: 'Fruits' },
+              { name: 'grains', options: createOptions(['Rice', 'Pasta', 'Bread', 'Quinoa', 'Oats', 'Barley', 'Couscous', 'Millet']), label: 'Grains' },
+              { name: 'dairy', options: createOptions(['Milk', 'Cheese', 'Yogurt', 'Butter', 'Cream', 'Buttermilk', 'Ghee']), label: 'Dairy' },
+              { name: 'herbs', options: createOptions(['Basil', 'Parsley', 'Cilantro', 'Thyme', 'Rosemary', 'Mint', 'Dill', 'Sage']), label: 'Herbs' },
+              { name: 'spices', options: createOptions(['Salt', 'Pepper', 'Cumin', 'Paprika', 'Cinnamon', 'Garlic Powder', 'Turmeric', 'Cardamom', 'Cloves', 'Nutmeg', 'Coriander']), label: 'Spices' },
+              { name: 'condiments', options: createOptions(['Ketchup', 'Mustard', 'Mayonnaise', 'Soy Sauce', 'Hot Sauce', 'Sriracha', 'Chutney', 'Relish']), label: 'Condiments' },
+              { name: 'oils', options: createOptions(['Olive Oil', 'Vegetable Oil', 'Coconut Oil', 'Sesame Oil', 'Avocado Oil', 'Ghee']), label: 'Oils' },
+            ].map((field) => (
+              <div key={field.name} className="mb-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-1">{field.label}</label>
+                {renderSelect(field.name as keyof FormData, field.options, `Select ${field.label.toLowerCase()}...`)}
+                {errors[field.name as keyof FormData] && <p className="text-red-500 text-xs mt-1">This field is required</p>}
+              </div>
+            ))}
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-1">Custom Ingredients</label>
+            <textarea
+              {...register('customIngredients')}
+              placeholder="Enter any additional ingredients you have, separated by commas"
+              className="w-full dark:bg-gray-800 rounded border border-gray-300 dark:border-gray-700 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-900 h-24 text-base outline-none text-gray-900 dark:text-gray-100 py-1 px-3 resize-none leading-6 transition-colors duration-200 ease-in-out"
+            ></textarea>
+          </div>
+          <div className='w-full flex justify-end'>
+            <button 
+              type="submit" 
+              className="md:w-1/5 w-2/4 text-white dark:text-gray-100 bg-indigo-500 border-0 text-center py-2 md:px-8 focus:outline-none hover:bg-indigo-600 rounded text-sm md:text-lg"
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? 'Saving...' : 'Save Ingredients'}
+            </button>
+          </div>
+        </form>
+      )}
     </div>
   );
 };

@@ -18,6 +18,7 @@ export async function connectDB(): Promise<void> {
     console.log("DB connected successfully");
   } catch (e) {
     const errorMessage = e instanceof Error ? e.message : "Unknown error occurred while connecting to DB!";
+    console.error("MongoDB connection error:", errorMessage);
     throw new Error(errorMessage);
   }
 }
