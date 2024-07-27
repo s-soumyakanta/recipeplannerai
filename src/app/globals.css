@@ -62,3 +62,43 @@ body {
     text-wrap: balance;
   }
 } */
+:root {
+  --bg-control: #ffffff;
+  --bg-control-focused: #f9fafb;
+  --border-control: #d1d5db;
+  --border-control-focused: #6366f1;
+  --border-control-hover: #a5b4fc;
+  --bg-menu: #ffffff;
+  --bg-option: #ffffff;
+  --bg-option-focused: #f3f4f6;
+  --bg-option-active: #e5e7eb;
+  --text-option: #111827;
+  --text-single-value: #111827;
+  --bg-multi-value: #e5e7eb;
+  --text-multi-value: #111827;
+  --text-multi-value-remove: #111827;
+  --bg-multi-value-remove-hover: #6366f1;
+  --text-multi-value-remove-hover: #ffffff;
+  --text-input: #111827;
+}
+
+.dark {
+  --bg-control: #1f2937;
+  --bg-control-focused: #374151;
+  --border-control: #4b5563;
+  --border-control-focused: #6366f1;
+  --border-control-hover: #9ca3af;
+  --bg-menu: #1f2937;
+  --bg-option: #1f2937;
+  --bg-option-focused: #374151;
+  --bg-option-active: #4b5563;
+  --text-option: #d1d5db;
+  --text-single-value: #d1d5db;
+  --bg-multi-value: #374151;
+  --text-multi-value: #d1d5db;
+  --text-multi-value-remove: #d1d5db;
+  --bg-multi-value-remove-hover: #4b5563;
+  --text-multi-value-remove-hover: #ffffff;
+  --text-input: #d1d5db;
+}
+
