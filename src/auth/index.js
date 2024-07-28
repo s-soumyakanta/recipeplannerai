@@ -2,6 +2,7 @@ import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { User } from "@/model/userModel";
 import bcrypt from "bcryptjs";
+import { connectDB } from "@/lib/mongo";
 
 export const {
   handlers: { GET, POST },
@@ -20,6 +21,8 @@ export const {
       },
       async authorize(credentials) {
         if (credentials === null) return null;
+
+        await connectDB();
 
         console.time("Authorization Process");
         try {
