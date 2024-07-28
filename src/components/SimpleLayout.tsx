@@ -18,21 +18,9 @@ const SimpleLayout: React.FC<LayoutProps> = ({ children }) => {
               RecipePlannerAI
             </span>
           </Link>
-          {/* <div className="flex items-center space-x-4">
-            <Link href="/login">
-              <button className="bg-blue-500 text-white py-2 px-3 rounded-md hover:bg-blue-600 transition duration-300">
-                Login
-              </button>
-            </Link>
-            <Link href="/register">
-              <button className="bg-indigo-500 text-white py-2 px-3 rounded-md hover:bg-indigo-600 transition duration-300">
-                Register
-              </button>
-            </Link>
-          </div> */}
         </div>
       </nav>
-      <main className="flex-1 flex items-center justify-center p-4">
+      <main className="flex-1 flex items-center justify-center p-4 overflow-hidden">
         {children}
       </main>
     </div>
