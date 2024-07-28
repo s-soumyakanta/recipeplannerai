@@ -1,11 +1,37 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { FiSend, FiCopy, FiCheck } from 'react-icons/fi';
 import { useChat } from 'ai/react';
+import { useSession } from 'next-auth/react';
+import useSWR from 'swr';
+
+const fetcher = (url: string) => fetch(url).then(res => res.json());
 
 const ChatSection: React.FC = () => {
-  const { messages, input, handleInputChange, handleSubmit, isLoading } = useChat();
+  const { data: session } = useSession();
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
+  const [preferences, setPreferences] = useState<any>(null);
+
+  const { messages, input, handleInputChange, handleSubmit, isLoading, append, setInput } = useChat({
+    api: '/api/chat',
+  });
+
+  const { data: preferencesData, error, isValidating } = useSWR(
+    session?.user?.id ? `/api/getpreferences?userId=${session.user.id}` : null,
+    fetcher,
+    {
+      onSuccess: (data) => {
+        setPreferences(data);
+      },
+    }
+  );
+
+  useEffect(() => {
+    if (preferencesData) {
+      console.log('Fetched preferences:', preferencesData);
+      setPreferences(preferencesData);
+    }
+  }, [preferencesData]);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -25,8 +51,28 @@ const ChatSection: React.FC = () => {
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
-      handleSubmit(e as any);
+      handleSubmitWithPreferences(e);
     }
+  };
+
+  const handleSubmitWithPreferences = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!session?.user?.id) {
+      alert('User not authenticated.');
+      return;
+    }
+
+    const messageContent = input;
+    const preferencesMessage = preferences ? `User preferences: ${JSON.stringify(preferences)}` : '';
+
+    await append({
+      role: 'user',
+      content: `${preferencesMessage}\n${messageContent}`
+    });
+
+    setInput('');
+    handleSubmit(e as any); // If handleSubmit needs to be called for additional handling
   };
 
   return (
@@ -88,7 +134,7 @@ const ChatSection: React.FC = () => {
               aria-label="Recipe request input"
             />
             <button
-              onClick={handleSubmit}
+              onClick={handleSubmitWithPreferences}
               className="p-3 rounded-lg bg-blue-500 hover:bg-blue-600 text-white transition duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
               aria-label="Send recipe request"
             >
