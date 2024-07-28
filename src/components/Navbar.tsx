@@ -7,8 +7,7 @@ import { FiMenu, FiSun, FiMoon, FiSettings, FiUser } from "react-icons/fi";
 import { GiCook } from "react-icons/gi";
 import { useBoolean } from "@/hooks/use-boolean";
 import useDarkMode from "@/hooks/use-dark-mode";
-import Logout from "./Logout";
-import Usercard from "./Usercard";
+import ProfileDropdown from "./ProfileDropdown";
 
 interface NavbarProps {
   setIsSidebarOpen: (isOpen: boolean) => void;
@@ -16,7 +15,7 @@ interface NavbarProps {
 
 const Navbar: React.FC<NavbarProps> = ({ setIsSidebarOpen }) => {
   const pathname = usePathname();
-  const { value: isProfileDropdownOpen, onToggle: toggleProfileDropdown } = useBoolean(false);
+  const { value: isProfileDropdownOpen, onToggle: toggleProfileDropdown, onFalse: closeProfileDropdown } = useBoolean(false);
   const { isDarkMode, toggleDarkMode } = useDarkMode();
 
   return (
@@ -66,13 +65,7 @@ const Navbar: React.FC<NavbarProps> = ({ setIsSidebarOpen }) => {
               >
                 <FiUser size={20} />
               </button>
-              {isProfileDropdownOpen && (
-                <div className="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white dark:bg-gray-700 ring-1 ring-black ring-opacity-5 focus:outline-none">
-                  <div className="py-1">
-                    <Logout />
-                  </div>
-                </div>
-              )}
+              <ProfileDropdown isOpen={isProfileDropdownOpen} onClose={closeProfileDropdown} />
             </div>
           </div>
         </div>
