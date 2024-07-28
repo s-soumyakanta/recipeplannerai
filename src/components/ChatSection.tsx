@@ -30,7 +30,7 @@ const ChatSection: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-full p-1">
       <h1 className="text-2xl sm:text-3xl font-bold mb-4 text-center text-blue-600 dark:text-blue-400">
         RecipePlannerAI Chat
       </h1>

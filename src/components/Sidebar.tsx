@@ -6,6 +6,8 @@ import { usePathname } from "next/navigation";
 import { IoClose, IoHomeOutline, IoListOutline, IoNutritionOutline, IoCloudOutline } from "react-icons/io5";
 import { GiCook } from "react-icons/gi";
 
+import { FaGithub, FaCalendarAlt, FaUsers, FaAward, FaBug } from 'react-icons/fa';
+
 interface SidebarProps {
   isSidebarOpen: boolean;
   setIsSidebarOpen: (isOpen: boolean) => void;
@@ -86,16 +88,29 @@ const Sidebar: React.FC<SidebarProps> = ({
               ))}
             </nav>
           </div>
+          <div className="mt-auto p-4">
+  <div className="rounded-lg bg-gradient-to-br from-purple-600 via-blue-600 to-indigo-700 p-6 border border-transparent shadow-lg">
+    <h3 className="text-xl font-bold text-white mb-2 flex items-center">
+      <IoCloudOutline className="mr-2 text-4xl" />
+       <Link target="_blank" href="https://hashnode.com/hackathons/ai-for-tomorrow?source=hackathon-feed-widget">#AIforTomorrow</Link>
+    </h3>
+    <p className="text-sm text-gray-200 mb-3">
+      The <span className="font-semibold"><Link target="_blank" href="https://hashnode.com/">Hashnode</Link></span> Hackathon
+    </p>
+    <div className="space-y-3">
+      <Link 
+        href="https://github.com/s-soumyakanta/recipeplannerai/issues" 
+        className="flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-colors duration-200 bg-white bg-opacity-10 text-white hover:bg-opacity-20"
+        target="_blank" 
+        rel="noopener noreferrer"
+      >
+        <FaBug className="mr-3 text-lg" />
+        Report an Issue
+      </Link>
+    </div>
+  </div>
+</div>
 
-          <div className="mt-auto">
-            <div className="rounded-lg bg-white dark:bg-gray-700 p-4 border border-gray-200 dark:border-gray-700">
-              <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2 flex items-center">
-                <IoCloudOutline className="mr-2" />
-                Local Weather
-              </h3>
-              <p className="text-sm text-gray-600 dark:text-gray-300">Weather data goes here</p>
-            </div>
-          </div>
         </div>
       </div>
     </>
