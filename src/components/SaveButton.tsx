@@ -10,7 +10,7 @@ const SaveButton: React.FC<SaveButtonProps> = ({ isLoading, children, ...props }
     <button
       disabled={isLoading}
       type="submit"
-      className={`md:w-1/5 w-2/4 text-white dark:text-gray-100 bg-indigo-500 border-0 text-center py-2 md:px-8 focus:outline-none hover:bg-indigo-600 rounded text-sm md:text-lg inline-flex items-center ${isLoading ? 'cursor-not-allowed' : ''}`}
+      className={`w-full md:w-1/5 text-white dark:text-gray-100 bg-indigo-500 border-0 text-center py-2 px-4 md:px-8 focus:outline-none hover:bg-indigo-600 rounded text-sm lg:text-lg inline-flex justify-center items-center ${isLoading ? 'cursor-not-allowed' : ''}`}
       {...props}
     >
       {isLoading && (
