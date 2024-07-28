@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { connectDB } from "@/lib/mongo"; // Ensure the path is correct
 import { SessionProvider } from 'next-auth/react';
+import ToastProvider from "@/components/ToastProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -50,7 +51,7 @@ export default async function RootLayout({
 
   return (
     <html lang="en">
-      <body className={inter.className}><SessionProvider>{children}</SessionProvider></body>
+      <body className={inter.className}><SessionProvider><ToastProvider>{children}</ToastProvider></SessionProvider></body>
     </html>
   );
 }

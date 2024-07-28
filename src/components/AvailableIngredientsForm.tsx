@@ -7,6 +7,9 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { useSession } from 'next-auth/react';
 import useSWR from 'swr';
+import { toast } from 'react-toastify';
+import Loading from './Loading';
+import SaveButton from './SaveButton';
 
 const formSchema = z.object({
   proteins: z.array(z.object({ value: z.string(), label: z.string() })).optional(),
@@ -48,6 +51,7 @@ const AvailableIngredientsForm: React.FC = () => {
       },
       onError: (error) => {
         setError('Error fetching preferences');
+        toast.error("Failed to fetch preferences.", { position: "top-right" });
       }
     }
   );
@@ -57,6 +61,7 @@ const AvailableIngredientsForm: React.FC = () => {
 
     if (!session?.user?.id) {
       setError('User not authenticated');
+      toast.error("User not authenticated.", { position: "top-right" });
       setIsSubmitting(false);
       return;
     }
@@ -73,12 +78,14 @@ const AvailableIngredientsForm: React.FC = () => {
       });
 
       if (response.ok) {
-        console.log('Preferences saved successfully');
+        toast.success("Preferences saved successfully!", { position: "top-right" });
       } else {
         setError('Error saving preferences');
+        toast.error("Error saving preferences.", { position: "top-right" });
       }
     } catch (error) {
       setError('Error saving preferences');
+      toast.error("Error saving preferences.", { position: "top-right" });
     } finally {
       setIsSubmitting(false);
     }
@@ -154,7 +161,7 @@ const AvailableIngredientsForm: React.FC = () => {
     <div className="container mx-auto px-4 py-8 bg-white dark:bg-gray-900">
       <h1 className="text-2xl font-medium mb-6 text-gray-900 dark:text-white">Available Ingredients</h1>
       {isValidating ? (
-        <p>Loading...</p>
+        <Loading />
       ) : error ? (
         <p className="text-red-500">{error}</p>
       ) : (
@@ -187,13 +194,9 @@ const AvailableIngredientsForm: React.FC = () => {
             ></textarea>
           </div>
           <div className='w-full flex justify-end'>
-            <button 
-              type="submit" 
-              className="md:w-1/5 w-2/4 text-white dark:text-gray-100 bg-indigo-500 border-0 text-center py-2 md:px-8 focus:outline-none hover:bg-indigo-600 rounded text-sm md:text-lg"
-              disabled={isSubmitting}
-            >
-              {isSubmitting ? 'Saving...' : 'Save Ingredients'}
-            </button>
+            <SaveButton isLoading={isSubmitting}>
+              Save Ingredients
+            </SaveButton>
           </div>
         </form>
       )}

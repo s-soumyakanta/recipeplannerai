@@ -1,12 +1,15 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useForm, Controller, SubmitHandler, useWatch } from 'react-hook-form';
 import Select from 'react-select';
 import { zodResolver } from '@hookform/resolvers/zod';
 import useSWR from 'swr';
 import * as z from 'zod';
 import { useSession } from 'next-auth/react';
+import { toast } from 'react-toastify';
+import Loading from './Loading';
+import SaveButton from './SaveButton';
 
 const formSchema = z.object({
   dietaryRestrictions: z.array(z.object({ value: z.string(), label: z.string() })).optional(),
@@ -56,6 +59,7 @@ const DietPreferenceForm: React.FC = () => {
       },
       onError: (error) => {
         setError('Error fetching preferences');
+        toast.error("Failed to fetch preferences.", { position: "top-right" });
       }
     }
   );
@@ -65,6 +69,7 @@ const DietPreferenceForm: React.FC = () => {
 
     if (!session?.user?.id) {
       setError('User not authenticated');
+      toast.error("User not authenticated.", { position: "top-right" });
       setIsSubmitting(false);
       return;
     }
@@ -81,12 +86,14 @@ const DietPreferenceForm: React.FC = () => {
       });
 
       if (response.ok) {
-        console.log('Preferences saved successfully');
+        toast.success("Preferences saved successfully!", { position: "top-right" });
       } else {
         setError('Error saving preferences');
+        toast.error("Error saving preferences.", { position: "top-right" });
       }
     } catch (error) {
       setError('Error saving preferences');
+      toast.error("Error saving preferences.", { position: "top-right" });
     } finally {
       setIsSubmitting(false);
     }
@@ -143,7 +150,7 @@ const DietPreferenceForm: React.FC = () => {
     <div className="container mx-auto px-4 py-8 bg-white dark:bg-gray-900">
       <h1 className="text-2xl font-medium mb-6 text-gray-900 dark:text-white">Diet Preferences</h1>
       {isValidating ? (
-        <p>Loading...</p>
+        <Loading />
       ) : error ? (
         <p className="text-red-500">{error}</p>
       ) : (
@@ -213,13 +220,9 @@ const DietPreferenceForm: React.FC = () => {
             {errors.specialInstructions && <p className="text-red-500 text-xs mt-1">{errors.specialInstructions?.message}</p>}
           </div>
           <div className='w-full flex justify-end'>
-            <button 
-              type="submit" 
-              className="md:w-1/5 w-2/4 text-white dark:text-gray-100 bg-indigo-500 border-0 text-center py-2 md:px-8 focus:outline-none hover:bg-indigo-600 rounded text-sm md:text-lg"
-              disabled={isSubmitting || isFormEmpty()}
-            >
-              {isSubmitting ? 'Saving...' : 'Save Preferences'}
-            </button>
+            <SaveButton isLoading={isSubmitting || isFormEmpty()}>
+              Save Preferences
+            </SaveButton>
           </div>
         </form>
       )}
