@@ -2,15 +2,17 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { connectDB } from "@/lib/mongo"; // Ensure the path is correct
-import { SessionProvider } from 'next-auth/react';
+import { SessionProvider } from "next-auth/react";
 import ToastProvider from "@/components/ToastProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "RecipePlannerAI | AI-Powered Recipe Assistant",
-  description: "Discover personalized recipes with RecipePlannerAI, your AI-powered cooking companion. Get tailored meal suggestions based on your preferences, dietary needs, and available ingredients.",
-  keywords: "AI recipe assistant, personalized recipes, cooking app, meal planner, dietary recommendations",
+  description:
+    "Discover personalized recipes with RecipePlannerAI, your AI-powered cooking companion. Get tailored meal suggestions based on your preferences, dietary needs, and available ingredients.",
+  keywords:
+    "AI recipe assistant, personalized recipes, cooking app, meal planner, dietary recommendations",
   authors: [{ name: "S Soumyakanta" }],
   creator: "S Soumyakanta",
   publisher: "RecipePlannerAI",
@@ -30,7 +32,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "RecipePlannerAI | AI-Powered Recipe Assistant",
     description: "Your personal AI chef for tailored recipes and meal planning",
-    url: "https://cookbuddy.vercel.app", // Update this URL to your actual website
+    url: "https://recipeplannerai.vercel.app/", // Update this URL to your actual website
     siteName: "RecipePlannerAI",
     locale: "en_US",
     type: "website",
@@ -38,7 +40,8 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary",
     title: "RecipePlannerAI | AI-Powered Recipe Assistant",
-    description: "Discover personalized recipes with RecipePlannerAI, your AI cooking companion",
+    description:
+      "Discover personalized recipes with RecipePlannerAI, your AI cooking companion",
   },
 };
 
@@ -51,7 +54,11 @@ export default async function RootLayout({
 
   return (
     <html lang="en">
-      <body className={inter.className}><SessionProvider><ToastProvider>{children}</ToastProvider></SessionProvider></body>
+      <body className={inter.className}>
+        <SessionProvider>
+          <ToastProvider>{children}</ToastProvider>
+        </SessionProvider>
+      </body>
     </html>
   );
 }
