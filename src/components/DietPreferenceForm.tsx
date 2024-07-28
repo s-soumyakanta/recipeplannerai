@@ -1,10 +1,12 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useForm, Controller, SubmitHandler, useWatch } from 'react-hook-form';
 import Select from 'react-select';
 import { zodResolver } from '@hookform/resolvers/zod';
+import useSWR from 'swr';
 import * as z from 'zod';
+import { useSession } from 'next-auth/react';
 
 const formSchema = z.object({
   dietaryRestrictions: z.array(z.object({ value: z.string(), label: z.string() })).optional(),
@@ -28,9 +30,11 @@ interface Option {
   label: string;
 }
 
+const fetcher = (url: string) => fetch(url).then(res => res.json());
+
 const DietPreferenceForm: React.FC = () => {
+  const { data: session } = useSession();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   const { register, handleSubmit, control, reset, formState: { errors }, watch } = useForm<FormData>({
@@ -43,37 +47,29 @@ const DietPreferenceForm: React.FC = () => {
 
   const watchedFields = useWatch({ control });
 
-  useEffect(() => {
-    const fetchPreferences = async () => {
-      const userId = "60d0fe4f5311236168a109de"; // Replace with actual userId
-      if (!/^[0-9a-fA-F]{24}$/.test(userId)) {
-        setError('Invalid user ID');
-        setLoading(false);
-        return;
-      }
-
-      try {
-        const response = await fetch(`/api/getpreferences?userId=${userId}`);
-        const data = await response.json();
-        if (response.ok) {
-          reset(data);
-        } else {
-          setError(data.error || 'Failed to fetch preferences');
-        }
-      } catch (error) {
+  const { data, isValidating } = useSWR(
+    session?.user?.id ? `/api/getpreferences?userId=${session.user.id}` : null,
+    fetcher,
+    {
+      onSuccess: (data) => {
+        reset(data);
+      },
+      onError: (error) => {
         setError('Error fetching preferences');
-      } finally {
-        setLoading(false);
       }
-    };
-
-    fetchPreferences();
-  }, [reset]);
+    }
+  );
 
   const onSubmit: SubmitHandler<FormData> = async (data) => {
     setIsSubmitting(true);
-    const userId = "60d0fe4f5311236168a109de"; // Replace with actual userId
-    const dataWithUserId = { ...data, userId }; // Add userId to the form data
+
+    if (!session?.user?.id) {
+      setError('User not authenticated');
+      setIsSubmitting(false);
+      return;
+    }
+
+    const dataWithUserId = { ...data, userId: session.user.id };
 
     try {
       const response = await fetch('/api/savepreferences', {
@@ -146,7 +142,7 @@ const DietPreferenceForm: React.FC = () => {
   return (
     <div className="container mx-auto px-4 py-8 bg-white dark:bg-gray-900">
       <h1 className="text-2xl font-medium mb-6 text-gray-900 dark:text-white">Diet Preferences</h1>
-      {loading ? (
+      {isValidating ? (
         <p>Loading...</p>
       ) : error ? (
         <p className="text-red-500">{error}</p>
@@ -165,7 +161,7 @@ const DietPreferenceForm: React.FC = () => {
               <div key={field.name} className="mb-2">
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-1">{field.label}</label>
                 {renderSelect(field.name as keyof FormData, field.options, `Select ${field.label.toLowerCase()}...`)}
-                {errors[field.name as keyof FormData] && <p className="text-red-500 text-xs mt-1">This field is required</p>}
+                {errors[field.name as keyof FormData] && <p className="text-red-500 text-xs mt-1">{errors[field.name as keyof FormData]?.message}</p>}
               </div>
             ))}
             <div className="mb-2">
@@ -185,12 +181,12 @@ const DietPreferenceForm: React.FC = () => {
                   <span className="text-sm text-gray-700 dark:text-gray-400 mt-1 block">{field.value} min</span>
                 )}
               />
-              {errors.averageCookingTime && <p className="text-red-500 text-xs mt-1">Invalid cooking time</p>}
+              {errors.averageCookingTime && <p className="text-red-500 text-xs mt-1">{errors.averageCookingTime?.message}</p>}
             </div>
             <div className="mb-2">
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-1">Cooking Skill Level</label>
               {renderSingleSelect('cookingSkillLevel', createOptions(['Beginner', 'Intermediate', 'Advanced']), 'Select skill level...')}
-              {errors.cookingSkillLevel && <p className="text-red-500 text-xs mt-1">This field is required</p>}
+              {errors.cookingSkillLevel && <p className="text-red-500 text-xs mt-1">{errors.cookingSkillLevel?.message}</p>}
             </div>
             <div className="mb-2">
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-1">Daily Calorie Target</label>
@@ -199,12 +195,12 @@ const DietPreferenceForm: React.FC = () => {
                 {...register('calorieTarget', { valueAsNumber: true })}
                 className="w-full dark:bg-gray-800 rounded border border-gray-300 dark:border-gray-700 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-900 text-base outline-none text-gray-900 dark:text-gray-100 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
               />
-              {errors.calorieTarget && <p className="text-red-500 text-xs mt-1">Invalid calorie target</p>}
+              {errors.calorieTarget && <p className="text-red-500 text-xs mt-1">{errors.calorieTarget?.message}</p>}
             </div>
             <div className="mb-2">
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-1">Meal Plan Frequency</label>
               {renderSingleSelect('mealPlanFrequency', createOptions(['Daily', 'Weekly', 'Monthly']), 'Select frequency...')}
-              {errors.mealPlanFrequency && <p className="text-red-500 text-xs mt-1">This field is required</p>}
+              {errors.mealPlanFrequency && <p className="text-red-500 text-xs mt-1">{errors.mealPlanFrequency?.message}</p>}
             </div>
           </div>
           <div>
@@ -214,7 +210,7 @@ const DietPreferenceForm: React.FC = () => {
               placeholder="Enter any additional instructions you have, separated by commas (e.g., no sugar, extra sauce)"
               className="w-full dark:bg-gray-800 rounded border border-gray-300 dark:border-gray-700 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-900 h-24 text-base outline-none text-gray-900 dark:text-gray-100 py-1 px-3 resize-none leading-6 transition-colors duration-200 ease-in-out"
             ></textarea>
-            {errors.specialInstructions && <p className="text-red-500 text-xs mt-1">Special instructions too long</p>}
+            {errors.specialInstructions && <p className="text-red-500 text-xs mt-1">{errors.specialInstructions?.message}</p>}
           </div>
           <div className='w-full flex justify-end'>
             <button 

@@ -1,21 +1,23 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useForm, Controller, SubmitHandler } from 'react-hook-form';
 import Select, { StylesConfig } from 'react-select';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
+import { useSession } from 'next-auth/react';
+import useSWR from 'swr';
 
 const formSchema = z.object({
-  proteins: z.array(z.object({ value: z.string(), label: z.string() })),
-  vegetables: z.array(z.object({ value: z.string(), label: z.string() })),
-  fruits: z.array(z.object({ value: z.string(), label: z.string() })),
-  grains: z.array(z.object({ value: z.string(), label: z.string() })),
-  dairy: z.array(z.object({ value: z.string(), label: z.string() })),
-  herbs: z.array(z.object({ value: z.string(), label: z.string() })),
-  spices: z.array(z.object({ value: z.string(), label: z.string() })),
-  condiments: z.array(z.object({ value: z.string(), label: z.string() })),
-  oils: z.array(z.object({ value: z.string(), label: z.string() })),
+  proteins: z.array(z.object({ value: z.string(), label: z.string() })).optional(),
+  vegetables: z.array(z.object({ value: z.string(), label: z.string() })).optional(),
+  fruits: z.array(z.object({ value: z.string(), label: z.string() })).optional(),
+  grains: z.array(z.object({ value: z.string(), label: z.string() })).optional(),
+  dairy: z.array(z.object({ value: z.string(), label: z.string() })).optional(),
+  herbs: z.array(z.object({ value: z.string(), label: z.string() })).optional(),
+  spices: z.array(z.object({ value: z.string(), label: z.string() })).optional(),
+  condiments: z.array(z.object({ value: z.string(), label: z.string() })).optional(),
+  oils: z.array(z.object({ value: z.string(), label: z.string() })).optional(),
   customIngredients: z.string().optional()
 });
 
@@ -26,40 +28,40 @@ interface Option {
   label: string;
 }
 
+const fetcher = (url: string) => fetch(url).then(res => res.json());
+
 const AvailableIngredientsForm: React.FC = () => {
+  const { data: session } = useSession();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   const { register, handleSubmit, control, reset, formState: { errors } } = useForm<FormData>({
     resolver: zodResolver(formSchema),
   });
 
-  useEffect(() => {
-    const fetchPreferences = async () => {
-      const userId = "60d0fe4f5311236168a109de"; // Replace with actual userId
-      try {
-        const response = await fetch(`/api/getpreferences?userId=${userId}`);
-        const data = await response.json();
-        if (response.ok) {
-          reset(data);
-        } else {
-          setError(data.error || 'Failed to fetch preferences');
-        }
-      } catch (error) {
+  const { data, isValidating } = useSWR(
+    session?.user?.id ? `/api/getpreferences?userId=${session.user.id}` : null,
+    fetcher,
+    {
+      onSuccess: (data) => {
+        reset(data);
+      },
+      onError: (error) => {
         setError('Error fetching preferences');
-      } finally {
-        setLoading(false);
       }
-    };
-
-    fetchPreferences();
-  }, [reset]);
+    }
+  );
 
   const onSubmit: SubmitHandler<FormData> = async (data) => {
     setIsSubmitting(true);
-    const userId = "60d0fe4f5311236168a109de"; // Replace with actual userId
-    const dataWithUserId = { ...data, userId };
+
+    if (!session?.user?.id) {
+      setError('User not authenticated');
+      setIsSubmitting(false);
+      return;
+    }
+
+    const dataWithUserId = { ...data, userId: session.user.id };
 
     try {
       const response = await fetch('/api/savepreferences', {
@@ -151,7 +153,7 @@ const AvailableIngredientsForm: React.FC = () => {
   return (
     <div className="container mx-auto px-4 py-8 bg-white dark:bg-gray-900">
       <h1 className="text-2xl font-medium mb-6 text-gray-900 dark:text-white">Available Ingredients</h1>
-      {loading ? (
+      {isValidating ? (
         <p>Loading...</p>
       ) : error ? (
         <p className="text-red-500">{error}</p>
@@ -172,7 +174,7 @@ const AvailableIngredientsForm: React.FC = () => {
               <div key={field.name} className="mb-4">
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-1">{field.label}</label>
                 {renderSelect(field.name as keyof FormData, field.options, `Select ${field.label.toLowerCase()}...`)}
-                {errors[field.name as keyof FormData] && <p className="text-red-500 text-xs mt-1">This field is required</p>}
+                {errors[field.name as keyof FormData] && <p className="text-red-500 text-xs mt-1">{errors[field.name as keyof FormData]?.message}</p>}
               </div>
             ))}
           </div>

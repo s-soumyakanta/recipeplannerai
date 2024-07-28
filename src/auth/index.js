@@ -37,7 +37,7 @@ export const {
 
             if (isMatch) {
               console.timeEnd("Authorization Process");
-              return user;
+              return { id: user._id, email: user.email, name: user.name }; // Include user ID
             } else {
               console.timeEnd("Authorization Process");
               throw new Error("Email or Password is not correct");
@@ -53,4 +53,21 @@ export const {
       },
     })
   ],
+  callbacks: {
+    async session({ session, token }) {
+      if (token) {
+        session.user.id = token.id; // Add the user ID to the session
+      }
+      return session;
+    },
+    async jwt({ token, user }) {
+      if (user) {
+        token.id = user.id; // Add the user ID to the JWT token
+      }
+      return token;
+    },
+  },
+  pages: {
+    signIn: '/auth/signin', // Custom sign-in page if you have one
+  },
 });
