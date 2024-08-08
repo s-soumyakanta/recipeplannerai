@@ -158,7 +158,7 @@ const AvailableIngredientsForm: React.FC = () => {
   );
 
   return (
-    <div className="container mx-auto px-4 py-8 bg-white dark:bg-gray-900">
+    <div className="container mx-auto bg-white dark:bg-gray-950">
       <h1 className="text-2xl font-medium mb-6 text-gray-900 dark:text-white">Available Ingredients</h1>
       {isValidating ? (
         <Loading />

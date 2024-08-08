@@ -19,7 +19,7 @@ const Navbar: React.FC<NavbarProps> = ({ setIsSidebarOpen }) => {
   const { isDarkMode, toggleDarkMode } = useDarkMode();
 
   return (
-    <nav className="bg-gray-100 dark:bg-gray-800 shadow-lg border-b border-gray-200 dark:border-gray-700 w-screen">
+    <nav className="bg-gray-100 dark:bg-gray-950 shadow-lg border-b border-gray-200 dark:border-gray-700 w-screen">
       <div className="max-w-8xl mx-auto px-3 py-4">
         <div className="flex justify-between items-center">
           <div className="flex items-center">
