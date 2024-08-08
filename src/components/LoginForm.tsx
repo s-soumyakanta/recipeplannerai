@@ -39,9 +39,9 @@ const LoginForm = () => {
   }
 
   return (
-    <div className="w-full max-h-full flex items-center justify-center bg-gray-100 dark:bg-gray-900 transition duration-500 dark:text-white overflow-hidden">
-      <div className="flex flex-col md:flex-row w-full max-w-4xl bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden">
-        <div className="md:w-1/2 hidden md:block items-center justify-center bg-gray-300 dark:bg-gray-700">
+    <div className="w-full max-h-full flex items-center justify-center bg-gray-100 dark:bg-gray-950 transition duration-500 dark:text-white overflow-hidden">
+      <div className="flex flex-col md:flex-row w-full max-w-4xl bg-white dark:bg-gray-900 rounded-lg shadow-md overflow-hidden">
+        <div className="md:w-1/2 hidden md:block items-center justify-center bg-gray-300 dark:bg-gray-900">
           <div className="w-full h-full relative flex items-center justify-center">
             <Image
               src="/images/loginimage.webp"
