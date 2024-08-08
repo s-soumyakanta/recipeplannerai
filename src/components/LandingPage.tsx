@@ -11,7 +11,7 @@ const LandingPage = () => {
           <h1 className="text-4xl md:text-7xl font-bold bg-gradient-to-b from-[#ffd319] via-[#ff2975] to-[#8c1eff] bg-clip-text text-transparent">
             RecipePlannerAI
           </h1>
-          <p className="mt-4 text-sm md:text-xl">
+          <p className="mt-4 text-base md:text-xl">
             This AI-powered web app offers personalized recipe suggestions, meal
             planning, and cooking advice tailored to your preferences and
             dietary needs. Discover new dishes, optimize your grocery shopping,
@@ -25,6 +25,11 @@ const LandingPage = () => {
             <span>Get Started</span> <ArrowRight />
           </button>
         </Link>
+        <div className="absolute bottom-0 right-0 p-4">
+           <h2 className="text-xs">By  <Link href="https://s-soumyakanta.com">
+           <span className="bg-gradient-to-b from-[#ffd319] via-[#ff2975] to-[#8c1eff] bg-clip-text text-transparent">S Soumyakanta</span></Link></h2>
+            
+        </div>
       </div>
     </>
   );
