@@ -14,7 +14,7 @@ const SimpleLayout: React.FC<LayoutProps> = ({ children }) => {
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-100 dark:bg-gray-950 transition duration-500">
-      <nav className="bg-white dark:bg-gray-950  border-b border-gray-200 dark:border-gray-700">
+      <nav className="bg-white dark:bg-gray-950  border-b border-gray-200 lg:py-2 lg:px-24 dark:border-gray-700">
         <div className="max-w-8xl mx-auto px-3 py-4 flex justify-between items-center">
           <Link href="/" className="flex-shrink-0 flex items-center">
             <GiCook className="text-xl sm:text-3xl text-blue-600 dark:text-blue-500 inline-block" />

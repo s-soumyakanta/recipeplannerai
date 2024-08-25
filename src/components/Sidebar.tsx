@@ -89,18 +89,10 @@ const Sidebar: React.FC<SidebarProps> = ({
             </nav>
           </div>
           <div className="mt-auto p-4">
-  <div className="rounded-lg bg-slate-500 dark:bg-slate-900 p-6 border border-transparent shadow-lg">
-    <h3 className="text-xl font-bold text-white mb-2 flex items-center">
-      <IoCloudOutline className="mr-2 text-5xl" />
-       <Link target="_blank" href="https://hashnode.com/hackathons/ai-for-tomorrow?source=hackathon-feed-widget">#AIforTomorrow</Link>
-    </h3>
-    <p className="text-sm text-gray-200 mb-3">
-      The <span className="font-semibold"><Link target="_blank" href="https://hashnode.com/">Hashnode</Link></span> Hackathon
-    </p>
-    <div className="space-y-3">
+<div className="space-y-3">
       <Link 
         href="https://github.com/s-soumyakanta/recipeplannerai/issues" 
-        className="flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-colors duration-200 bg-white bg-opacity-10 text-white hover:bg-opacity-20"
+        className="flex items-center px-4 py-4 text-sm font-medium rounded-lg transition-colors duration-200 bg-indigo-700 bg-opacity-90 text-white hover:bg-opacity-20"
         target="_blank" 
         rel="noopener noreferrer"
       >
@@ -108,7 +100,7 @@ const Sidebar: React.FC<SidebarProps> = ({
         Report an Issue
       </Link>
     </div>
-  </div>
+
 </div>
 
         </div>
