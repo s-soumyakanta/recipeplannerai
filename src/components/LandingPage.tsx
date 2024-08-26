@@ -1,11 +1,13 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import useDarkMode from "@/hooks/use-dark-mode";
 import Link from "next/link";
 import Image from "next/image";
 import { FiMoon, FiSun } from "react-icons/fi";
 import { GiCook } from "react-icons/gi";
+import { Carousel } from "react-responsive-carousel";
+import "react-responsive-carousel/lib/styles/carousel.min.css"; // Import the carousel styles
 
 const reasons = [
   "Personalized Recipes",
@@ -17,21 +19,24 @@ const reasons = [
 ];
 
 const foodImages = [
-  { src: "https://images.pexels.com/photos/70497/pexels-photo-70497.jpeg", alt: "Food 1" },
-  { src: "https://images.pexels.com/photos/70497/pexels-photo-70497.jpeg", alt: "Food 2" },
-  { src: "https://images.pexels.com/photos/70497/pexels-photo-70497.jpeg", alt: "Food 3" },
-  { src: "https://images.pexels.com/photos/70497/pexels-photo-70497.jpeg", alt: "Food 4" },
-  { src: "https://images.pexels.com/photos/70497/pexels-photo-70497.jpeg", alt: "Food 5" },
-  { src: "https://images.pexels.com/photos/70497/pexels-photo-70497.jpeg", alt: "Food 6" },
-  { src: "https://images.pexels.com/photos/70497/pexels-photo-70497.jpeg", alt: "Food 7" },
-  { src: "https://images.pexels.com/photos/70497/pexels-photo-70497.jpeg", alt: "Food 8" },
+  { src: "https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg", alt: "Food 2" },
+  { src: "https://images.pexels.com/photos/376464/pexels-photo-376464.jpeg?auto=compress&cs=tinysrgb&w=800", alt: "Food 3" },
+  { src: "https://images.pexels.com/photos/1099680/pexels-photo-1099680.jpeg?auto=compress&cs=tinysrgb&w=800", alt: "Food 4" },
+  { src: "https://images.pexels.com/photos/1279330/pexels-photo-1279330.jpeg?auto=compress&cs=tinysrgb&w=800", alt: "Food 4" },
+  { src: "https://images.pexels.com/photos/958545/pexels-photo-958545.jpeg?auto=compress&cs=tinysrgb&w=800", alt: "Food 5" },
+  { src: "https://images.pexels.com/photos/262959/pexels-photo-262959.jpeg?auto=compress&cs=tinysrgb&w=800", alt: "Food 6" },
+  { src: "https://images.pexels.com/photos/1092730/pexels-photo-1092730.jpeg?auto=compress&cs=tinysrgb&w=800", alt: "Food 7" },
+  { src: "https://images.pexels.com/photos/566566/pexels-photo-566566.jpeg?auto=compress&cs=tinysrgb&w=800", alt: "Food 8" },
+  { src: "https://images.pexels.com/photos/406152/pexels-photo-406152.jpeg?auto=compress&cs=tinysrgb&w=600", alt: "Food 9" },
+  { src: "https://images.pexels.com/photos/769969/pexels-photo-769969.jpeg?auto=compress&cs=tinysrgb&w=600", alt: "Food 10" },
+  { src: "https://images.pexels.com/photos/803963/pexels-photo-803963.jpeg?auto=compress&cs=tinysrgb&w=600", alt: "Food 11" },
+  { src: "https://images.pexels.com/photos/1410236/pexels-photo-1410236.jpeg?auto=compress&cs=tinysrgb&w=600", alt: "Food 12" }
 ];
+
 
 function LandingPage() {
   const { isDarkMode, toggleDarkMode } = useDarkMode();
   const currentYear = new Date().getFullYear();
-
-
 
   return (
     <>
@@ -91,11 +96,28 @@ function LandingPage() {
           </div>
         </div>
 
-
-        {/* Why Choose Section */}
-        <section className="min-h-screen px-4 md:px-8 lg:px-24 py-12 bg-white dark:bg-gray-950 flex flex-col items-center justify-center text-center">
+        <section className="w-full flex items-center justify-center bg-indigo-600 h-72 my-20 relative overflow-hidden">
+      <Carousel
+        showArrows={true}
+        autoPlay={true}
+        infiniteLoop={true}
+        showThumbs={false}
+        showStatus={false}
+        centerMode={true}
+        centerSlidePercentage={33.33}
+        swipeable={true}
+        showIndicators={false}
+      >
+        {foodImages.map((image, index) => (
+          <div key={index} className="m-2 p-8 h-full flex justify-center items-center ">
+            <Image src={image.src} alt={image.alt} width={500} height={300} className="w-full  rounded-lg" />
+          </div>
+        ))}
+      </Carousel>
+    </section>
+        <section className="min-h-96 my-32 px-4 md:px-8 lg:px-24 py-12 bg-white dark:bg-gray-950 flex flex-col items-center justify-center text-center">
           <h2 className="text-3xl font-bold text-gray-900 dark:text-white text-center mb-10">
-            Why Choose RecipePlannerAI?
+            Why Choose <span className="text-indigo-700">RecipePlannerAI?</span>
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-5xl">
             {reasons.map((reason, index) => (
@@ -115,7 +137,7 @@ function LandingPage() {
         </section>
 
         {/* Call to Action Section */}
-        <section className="min-h-screen flex flex-col items-center justify-center text-center py-20">
+        <section className="min-h-96 my-32  mb-52 flex flex-col items-center justify-center text-center py-20">
           <h2 className="text-4xl font-extrabold mb-6">
             Ready to Start Cooking?
           </h2>
@@ -155,7 +177,7 @@ function LandingPage() {
             </li>
             <li>
               <a href="https://s-soumyakanta.com" className="hover:underline me-4 md:me-6 text-gray-200">
-                Creator Profile
+                Developed By
               </a>
             </li>
             <li>
