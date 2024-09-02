@@ -43,7 +43,7 @@ const Sidebar: React.FC<SidebarProps> = ({
     <>
       {isSidebarOpen && (
         <div
-          className="fixed inset-0 z-40 bg-gray-600 bg-opacity-75 transition-opacity md:hidden"
+          className="fixed inset-0 z-40 bg-gray-950 bg-opacity-75 transition-opacity md:hidden"
           onClick={() => setIsSidebarOpen(false)}
         ></div>
       )}
@@ -51,7 +51,7 @@ const Sidebar: React.FC<SidebarProps> = ({
       <div
         className={`fixed top-0 left-0 z-50 h-full w-4/5 max-w-xs transform transition-transform duration-300 ease-in-out ${
           isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-        } md:translate-x-0 md:static md:w-72 bg-gray-100 dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700`}
+        } md:translate-x-0 md:static md:w-72 bg-gray-100 dark:bg-gray-950 border-r border-gray-200 dark:border-gray-700`}
       >
         <div className="flex flex-col overflow-y-auto px-3 py-4 h-full">
           <div className="mb-8">
@@ -89,18 +89,10 @@ const Sidebar: React.FC<SidebarProps> = ({
             </nav>
           </div>
           <div className="mt-auto p-4">
-  <div className="rounded-lg bg-gradient-to-br from-purple-600 via-blue-600 to-indigo-700 p-6 border border-transparent shadow-lg">
-    <h3 className="text-xl font-bold text-white mb-2 flex items-center">
-      <IoCloudOutline className="mr-2 text-4xl" />
-       <Link target="_blank" href="https://hashnode.com/hackathons/ai-for-tomorrow?source=hackathon-feed-widget">#AIforTomorrow</Link>
-    </h3>
-    <p className="text-sm text-gray-200 mb-3">
-      The <span className="font-semibold"><Link target="_blank" href="https://hashnode.com/">Hashnode</Link></span> Hackathon
-    </p>
-    <div className="space-y-3">
+<div className="space-y-3">
       <Link 
         href="https://github.com/s-soumyakanta/recipeplannerai/issues" 
-        className="flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-colors duration-200 bg-white bg-opacity-10 text-white hover:bg-opacity-20"
+        className="flex items-center px-4 py-4 text-sm font-medium rounded-lg transition-colors duration-200 bg-indigo-700 bg-opacity-90 text-white hover:bg-opacity-20"
         target="_blank" 
         rel="noopener noreferrer"
       >
@@ -108,7 +100,7 @@ const Sidebar: React.FC<SidebarProps> = ({
         Report an Issue
       </Link>
     </div>
-  </div>
+
 </div>
 
         </div>
